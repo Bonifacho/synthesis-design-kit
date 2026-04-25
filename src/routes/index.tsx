@@ -1,21 +1,26 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PhoneFrame } from "@/components/syntesis/PhoneFrame";
-import { AuthScreen } from "@/components/syntesis/AuthScreen";
+import {
+  Dashboard,
+  RoleSwitcher,
+  type SyntesisRole,
+} from "@/components/syntesis/Dashboard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SÍNTESIS — Acceso · Aprende, sintetiza, avanza" },
+      { title: "SÍNTESIS — Dashboard · Aprende, sintetiza, avanza" },
       {
         name: "description",
         content:
-          "SÍNTESIS es una plataforma educativa móvil (LMS) para estudiantes, docentes y practicantes. Inicia sesión o regístrate para comenzar.",
+          "Dashboard inteligente multi-rol de SÍNTESIS: vistas dinámicas para estudiantes, docentes y practicantes con navegación móvil estilo iOS.",
       },
-      { property: "og:title", content: "SÍNTESIS — Plataforma educativa móvil" },
+      { property: "og:title", content: "SÍNTESIS — Dashboard multi-rol" },
       {
         property: "og:description",
         content:
-          "Sistema integral tecnológico para la enseñanza y el seguimiento interactivo secuencial.",
+          "Plataforma educativa móvil con experiencias adaptadas por rol: estudiante, docente y practicante (solo lectura).",
       },
     ],
   }),
@@ -23,9 +28,21 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [role, setRole] = useState<SyntesisRole>("estudiante");
+  const [activeTab, setActiveTab] = useState<string>("home");
+
+  const handleRoleChange = (next: SyntesisRole) => {
+    setRole(next);
+    // Reset a la primera pestaña del nuevo rol
+    setActiveTab(next === "estudiante" ? "home" : "groups");
+  };
+
   return (
-    <PhoneFrame>
-      <AuthScreen />
-    </PhoneFrame>
+    <div className="relative">
+      <RoleSwitcher role={role} onChange={handleRoleChange} />
+      <PhoneFrame>
+        <Dashboard role={role} activeTab={activeTab} onTabChange={setActiveTab} />
+      </PhoneFrame>
+    </div>
   );
 }
