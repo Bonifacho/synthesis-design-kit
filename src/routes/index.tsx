@@ -1,26 +1,31 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PhoneFrame } from "@/components/syntesis/PhoneFrame";
+import { AuthScreen } from "@/components/syntesis/AuthScreen";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "SÍNTESIS — Acceso · Aprende, sintetiza, avanza" },
+      {
+        name: "description",
+        content:
+          "SÍNTESIS es una plataforma educativa móvil (LMS) para estudiantes, docentes y practicantes. Inicia sesión o regístrate para comenzar.",
+      },
+      { property: "og:title", content: "SÍNTESIS — Plataforma educativa móvil" },
+      {
+        property: "og:description",
+        content:
+          "Sistema integral tecnológico para la enseñanza y el seguimiento interactivo secuencial.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <PhoneFrame>
+      <AuthScreen />
+    </PhoneFrame>
+  );
 }
