@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { ArrowLeft, Check, X } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
@@ -142,6 +142,13 @@ export function ExamScreen() {
     }
   };
 
+  const handlePrev = () => {
+    if (currentIdx === 0) return;
+    setCurrentIdx((i) => i - 1);
+  };
+
+  const canGoBack = currentIdx > 0;
+
   return (
     <div className="flex h-full flex-col bg-background">
       <ExamHeader current={currentIdx} total={total} />
@@ -171,13 +178,30 @@ export function ExamScreen() {
       </div>
 
       {/* Controles inferiores */}
-      <div className="border-t border-overlay/70 bg-background/95 px-4 pb-5 pt-3 backdrop-blur">
+      <div className="flex items-center gap-2.5 border-t border-overlay/70 bg-background/95 px-4 pb-5 pt-3 backdrop-blur">
+        {/* Anterior — secundario, oculto en la primera pregunta */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          disabled={!canGoBack}
+          aria-label="Pregunta anterior"
+          className={cn(
+            "flex h-12 shrink-0 items-center justify-center gap-1.5 rounded-2xl border-2 px-4 text-[14px] font-semibold tracking-tight transition-all",
+            canGoBack
+              ? "border-overlay bg-surface-elevated text-navy hover:border-slate/40 active:scale-[0.98]"
+              : "cursor-not-allowed border-transparent bg-overlay/60 text-slate/60",
+          )}
+        >
+          <ArrowLeft className="h-4 w-4" strokeWidth={2.6} />
+          Anterior
+        </button>
+
         <button
           type="button"
           onClick={handleNext}
           disabled={!canAdvance}
           className={cn(
-            "h-12 w-full rounded-2xl text-[15px] font-bold tracking-tight transition-all",
+            "h-12 flex-1 rounded-2xl text-[15px] font-bold tracking-tight transition-all",
             !canAdvance && "cursor-not-allowed bg-overlay text-slate",
             canAdvance && isLast && "bg-emerald text-white shadow-md3-2 hover:brightness-105",
             canAdvance &&
