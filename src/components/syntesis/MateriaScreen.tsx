@@ -159,6 +159,58 @@ function OvaCard({ ova, locked }: { ova: Ova; locked: boolean }) {
   const Icon = OVA_ICON[ova.kind];
   const isExam = ova.isExam;
 
+  const baseClasses = cn(
+    "group relative flex items-center gap-3 rounded-2xl bg-surface-elevated p-3.5 shadow-md3-1 transition-shadow",
+    locked
+      ? "pointer-events-none opacity-50"
+      : "hover:shadow-md3-2 active:scale-[0.99]",
+  );
+
+  const inner = (
+    <></>
+  );
+
+  // Si es examen y está desbloqueado, navega a /examen
+  if (isExam && !locked) {
+    return (
+      <Link
+        to="/examen"
+        aria-disabled={locked}
+        className={cn(baseClasses, "cursor-pointer")}
+      >
+        <OvaCardInner Icon={Icon} ova={ova} locked={locked} isExam={isExam} />
+      </Link>
+    );
+  }
+
+  void inner;
+
+  return (
+    <article aria-disabled={locked} className={baseClasses}>
+      <OvaCardInner Icon={Icon} ova={ova} locked={locked} isExam={isExam} />
+    </article>
+  );
+}
+
+function OvaCardInner({
+  Icon,
+  ova,
+  locked,
+  isExam,
+}: {
+  Icon: typeof BookOpen;
+  ova: Ova;
+  locked: boolean;
+  isExam: boolean | undefined;
+}) {
+  return (
+    <></>
+  );
+}
+
+function _OvaCardLegacy({ ova, locked }: { ova: Ova; locked: boolean }) {
+  const Icon = OVA_ICON[ova.kind];
+  const isExam = ova.isExam;
   return (
     <article
       aria-disabled={locked}
