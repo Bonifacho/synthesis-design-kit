@@ -1,8 +1,11 @@
 import { useMemo } from "react";
+import { Link } from "@tanstack/react-router";
 import {
   Bell,
   BookOpen,
+  ChevronRight,
   Eye,
+  FlaskConical,
   GraduationCap,
   Home,
   LineChart,
@@ -185,16 +188,47 @@ function StudentDashboard() {
         </div>
       </article>
 
-      {/* Próxima actividad — placeholder calmado */}
-      <article className="rounded-3xl border border-overlay bg-surface-elevated p-5 shadow-md3-1">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate">
-          Próxima actividad
-        </p>
-        <h3 className="mt-1 text-base font-semibold text-navy">Aún no tienes evaluaciones</h3>
-        <p className="mt-1 text-[13px] leading-relaxed text-slate">
-          Cuando tu docente publique un examen o taller, aparecerá aquí con su fecha y duración.
-        </p>
-      </article>
+      {/* Mis materias — navegables */}
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between px-1">
+          <h3 className="text-[13px] font-bold uppercase tracking-wider text-slate">
+            Mis Materias
+          </h3>
+          <span className="text-[11px] font-semibold text-slate">2</span>
+        </div>
+
+        <Link
+          to="/materia"
+          className="group flex items-center gap-3 rounded-2xl bg-surface-elevated p-3.5 shadow-md3-1 transition-shadow hover:shadow-md3-2 active:scale-[0.99]"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo/10 text-indigo">
+            <FlaskConical className="h-[20px] w-[20px]" strokeWidth={2.2} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate">
+              Ciencias naturales
+            </p>
+            <p className="truncate text-[14px] font-semibold text-navy">Química 10°A</p>
+            <p className="mt-0.5 truncate text-[11px] text-slate">
+              Unidad 1 · Tabla Periódica
+            </p>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-slate transition-transform group-hover:translate-x-0.5" />
+        </Link>
+
+        <article className="flex items-center gap-3 rounded-2xl bg-surface-elevated p-3.5 opacity-60 shadow-md3-1">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate/15 text-slate">
+            <BookOpen className="h-[20px] w-[20px]" strokeWidth={2.2} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate">
+              Ciencias naturales
+            </p>
+            <p className="truncate text-[14px] font-semibold text-navy">Física 10°A</p>
+            <p className="mt-0.5 truncate text-[11px] text-slate">Próximamente</p>
+          </div>
+        </article>
+      </div>
     </section>
   );
 }
