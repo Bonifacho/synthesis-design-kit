@@ -153,23 +153,13 @@ function UnidadHeader({ unidad }: { unidad: Unidad }) {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
- * OvaCard — tarjeta individual con MD3 elevation
+ * OvaCardContent — interior reusable (ícono + textos + candado)
  * ────────────────────────────────────────────────────────────────────────── */
-function OvaCard({ ova, locked }: { ova: Ova; locked: boolean }) {
+function OvaCardContent({ ova, locked }: { ova: Ova; locked: boolean }) {
   const Icon = OVA_ICON[ova.kind];
   const isExam = ova.isExam;
-
   return (
-    <article
-      aria-disabled={locked}
-      className={cn(
-        "group relative flex items-center gap-3 rounded-2xl bg-surface-elevated p-3.5 shadow-md3-1 transition-shadow",
-        locked
-          ? "pointer-events-none opacity-50"
-          : "hover:shadow-md3-2 active:scale-[0.99]",
-      )}
-    >
-      {/* Ícono OVA */}
+    <>
       <span
         className={cn(
           "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl",
@@ -183,7 +173,6 @@ function OvaCard({ ova, locked }: { ova: Ova; locked: boolean }) {
         <Icon className="h-[20px] w-[20px]" strokeWidth={2.2} />
       </span>
 
-      {/* Contenido */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-slate">
@@ -195,15 +184,10 @@ function OvaCard({ ova, locked }: { ova: Ova; locked: boolean }) {
             </span>
           )}
         </div>
-        <h3 className="mt-0.5 truncate text-[14px] font-semibold text-navy">
-          {ova.title}
-        </h3>
-        {ova.meta && (
-          <p className="mt-0.5 truncate text-[11px] text-slate">{ova.meta}</p>
-        )}
+        <h3 className="mt-0.5 truncate text-[14px] font-semibold text-navy">{ova.title}</h3>
+        {ova.meta && <p className="mt-0.5 truncate text-[11px] text-slate">{ova.meta}</p>}
       </div>
 
-      {/* Candado a la derecha en bloqueadas */}
       {locked && (
         <span
           aria-label="Contenido bloqueado"
@@ -212,6 +196,32 @@ function OvaCard({ ova, locked }: { ova: Ova; locked: boolean }) {
           <Lock className="h-[14px] w-[14px]" strokeWidth={2.4} />
         </span>
       )}
+    </>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * OvaCard — tarjeta MD3. Si es examen y está desbloqueada → Link a /examen.
+ * ────────────────────────────────────────────────────────────────────────── */
+function OvaCard({ ova, locked }: { ova: Ova; locked: boolean }) {
+  const baseClasses = cn(
+    "group relative flex items-center gap-3 rounded-2xl bg-surface-elevated p-3.5 shadow-md3-1 transition-shadow",
+    locked
+      ? "pointer-events-none opacity-50"
+      : "hover:shadow-md3-2 active:scale-[0.99]",
+  );
+
+  if (ova.isExam && !locked) {
+    return (
+      <Link to="/examen" className={baseClasses}>
+        <OvaCardContent ova={ova} locked={locked} />
+      </Link>
+    );
+  }
+
+  return (
+    <article aria-disabled={locked} className={baseClasses}>
+      <OvaCardContent ova={ova} locked={locked} />
     </article>
   );
 }
@@ -250,8 +260,6 @@ export interface MateriaScreenProps {
 }
 
 export function MateriaScreen({ subject = "Química 10°A" }: MateriaScreenProps) {
-  // Estado local: en una iteración futura permitirá marcar OVAs como completadas
-  // y reactivar la lógica de desbloqueo de unidades.
   const [unidades] = useState<Unidad[]>(UNIDADES);
 
   return (
