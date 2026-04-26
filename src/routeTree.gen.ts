@@ -9,11 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResultadoRouteImport } from './routes/resultado'
 import { Route as MateriaRouteImport } from './routes/materia'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ExamenRouteImport } from './routes/examen'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ResultadoRoute = ResultadoRouteImport.update({
+  id: '/resultado',
+  path: '/resultado',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MateriaRoute = MateriaRouteImport.update({
   id: '/materia',
   path: '/materia',
@@ -22,6 +29,11 @@ const MateriaRoute = MateriaRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExamenRoute = ExamenRouteImport.update({
+  id: '/examen',
+  path: '/examen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -38,39 +50,67 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/examen': typeof ExamenRoute
   '/login': typeof LoginRoute
   '/materia': typeof MateriaRoute
+  '/resultado': typeof ResultadoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/examen': typeof ExamenRoute
   '/login': typeof LoginRoute
   '/materia': typeof MateriaRoute
+  '/resultado': typeof ResultadoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/examen': typeof ExamenRoute
   '/login': typeof LoginRoute
   '/materia': typeof MateriaRoute
+  '/resultado': typeof ResultadoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/materia'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/examen'
+    | '/login'
+    | '/materia'
+    | '/resultado'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/materia'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/materia'
+  to: '/' | '/dashboard' | '/examen' | '/login' | '/materia' | '/resultado'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/examen'
+    | '/login'
+    | '/materia'
+    | '/resultado'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  ExamenRoute: typeof ExamenRoute
   LoginRoute: typeof LoginRoute
   MateriaRoute: typeof MateriaRoute
+  ResultadoRoute: typeof ResultadoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resultado': {
+      id: '/resultado'
+      path: '/resultado'
+      fullPath: '/resultado'
+      preLoaderRoute: typeof ResultadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/materia': {
       id: '/materia'
       path: '/materia'
@@ -83,6 +123,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/examen': {
+      id: '/examen'
+      path: '/examen'
+      fullPath: '/examen'
+      preLoaderRoute: typeof ExamenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -105,8 +152,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  ExamenRoute: ExamenRoute,
   LoginRoute: LoginRoute,
   MateriaRoute: MateriaRoute,
+  ResultadoRoute: ResultadoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
